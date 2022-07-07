@@ -16,19 +16,18 @@ class _profileTabState extends State<profileTab> {
     return Scaffold(
       body: Center(
         child: InkWell(
-          onTap: (){
+          onTap: () {
             fAuth.signOut();
-             Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (c) => MySplashScreen(),
-      ),
-    );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (c) => MySplashScreen(),
+              ),
+            );
           },
-          
-          child: Text('Sign out')),
+          child: const Text('Sign out'),
+        ),
       ),
     );
-    
   }
 }
