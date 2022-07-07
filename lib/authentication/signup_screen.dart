@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nable/authentication/car_infore_screen.dart';
+import 'package:nable/authentication/login_screen_implementation.dart';
 
 class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
@@ -162,6 +163,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: const Text(
                     'Create Account',
                     style: TextStyle(color: Colors.black54, fontSize: 18),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (c) => LoginScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'Already Have an Account? Login Here',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                 ),
               ],
