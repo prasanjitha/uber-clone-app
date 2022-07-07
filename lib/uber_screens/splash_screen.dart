@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:nable/gloable/gloable.dart';
 import 'package:nable/uber_screens/main_screen.dart';
 
 import '../authentication/login_screen_implementation.dart';
@@ -15,13 +16,22 @@ class MySplashScreen extends StatefulWidget {
 
 class _MySplashScreenState extends State<MySplashScreen> {
   startTimer() {
-    Timer(Duration(seconds: 3), () async {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (c) => LoginScreen(),
-        ),
-      );
+    Timer(const Duration(seconds: 3), () async {
+      if (await fAuth.currentUser != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => MainScreen(),
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => LoginScreen(),
+          ),
+        );
+      }
     });
   }
 

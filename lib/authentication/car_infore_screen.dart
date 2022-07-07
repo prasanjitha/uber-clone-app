@@ -1,4 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nable/gloable/gloable.dart';
+import 'package:nable/uber_screens/splash_screen.dart';
 
 class CarInforeScreen extends StatefulWidget {
   CarInforeScreen({Key? key}) : super(key: key);
@@ -14,6 +18,31 @@ class _CarInforeScreenState extends State<CarInforeScreen> {
   TextEditingController carColorTextEditingController = TextEditingController();
 
   String? selectedCarType;
+
+  saveCarInfor() {
+    Map driverCarInforMap = {
+      "car_color": carColorTextEditingController.text.trim(),
+      "car_number": carNumberTextEditingController.text.trim(),
+      "car_model": carModelTextEditingController.text.trim(),
+      "type": selectedCarType,
+    };
+    DatabaseReference driverRef =
+        FirebaseDatabase.instance.ref().child('drivers');
+    driverRef
+        .child(currentFirebaseUser!.uid)
+        .child("car_details")
+        .set(driverCarInforMap);
+    Fluttertoast.showToast(
+      msg: "Car details has been saved. Congratulations! ",
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (c) => MySplashScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -134,7 +163,10 @@ class _CarInforeScreenState extends State<CarInforeScreen> {
                     <String>["uber-x", "uber-go", "bike"].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value,style: const TextStyle(color: Colors.white, fontSize: 14),),
+                    child: Text(
+                      value,
+                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                    ),
                   );
                 }).toList(),
                 onChanged: (newValue) {
@@ -146,23 +178,23 @@ class _CarInforeScreenState extends State<CarInforeScreen> {
               const SizedBox(
                 height: 40.0,
               ),
-                 
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.lightGreenAccent),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (c) => CarInforeScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Save Now',
-                    style: TextStyle(color: Colors.black54, fontSize: 18),
-                  ),
+              ElevatedButton(
+                style:
+                    ElevatedButton.styleFrom(primary: Colors.lightGreenAccent),
+                onPressed: () {
+                  if (carColorTextEditingController.text.isNotEmpty &&
+                      carModelTextEditingController.text.isNotEmpty &&
+                      carNumberTextEditingController.text.isNotEmpty &&
+                      selectedCarType != null) {
+                    saveCarInfor();
+   
+                  }
+                },
+                child: const Text(
+                  'Save Now',
+                  style: TextStyle(color: Colors.black54, fontSize: 18),
                 ),
+              ),
             ],
           ),
         ),
