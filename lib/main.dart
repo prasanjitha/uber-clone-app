@@ -1,15 +1,13 @@
 // ignore_for_file: sort_child_properties_last
 
 import 'package:flutter/material.dart';
-import 'package:nable/creens/second_screen.dart';
-import 'package:nable/pages/chat_pages.dart';
-import 'package:nable/pages/covid_pages.dart';
-import 'package:nable/test.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'uber_screens/splash_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp(
     child: MaterialApp(
         title: 'Flutter Demo',
