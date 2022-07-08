@@ -1,6 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nable/authentication/signup_screen.dart';
 import 'package:nable/uber_screens/main_screen.dart';
+import 'package:nable/uber_screens/splash_screen.dart';
+
+import '../gloable/gloable.dart';
+import '../widgets/progress_dialog.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -12,6 +20,54 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
+  validateForm() {
+    if (!emailTextEditingController.text.contains("@")) {
+      Fluttertoast.showToast(msg: 'Email is not valid.');
+    } else if (passwordTextEditingController.text.isEmpty) {
+      Fluttertoast.showToast(msg: 'Password is required.');
+    } else {
+      loginDriverNow();
+    }
+  }
+
+  loginDriverNow() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ProgressDialog(message: 'Prossecing, Please wait...');
+      },
+    );
+    final User? firebaseUser = (await fAuth
+            .signInWithEmailAndPassword(
+      email: emailTextEditingController.text.trim(),
+      password: passwordTextEditingController.text.trim(),
+    )
+            .catchError((msg) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: "Error: " + msg.toString(),
+      );
+    }))
+        .user;
+    if (firebaseUser != null) {
+      currentFirebaseUser = firebaseUser;
+      Fluttertoast.showToast(
+        msg: "Login successfully! ",
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (c) => MySplashScreen(),
+        ),
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Errr Occured during Login ",
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,12 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(primary: Colors.lightGreenAccent),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (c) => MainScreen(),
-                  ),
-                );
+                validateForm();
               },
               child: const Text(
                 'Login',
@@ -127,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: const Text(
                 'Do not Have an Account? Register Here',
-                style: TextStyle(color: Colors.grey,fontSize: 18),
+                style: TextStyle(color: Colors.grey, fontSize: 18),
               ),
             ),
           ],

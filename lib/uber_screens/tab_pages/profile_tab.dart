@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nable/gloable/gloable.dart';
 
 import '../splash_screen.dart';
@@ -16,19 +17,19 @@ class _profileTabState extends State<profileTab> {
     return Scaffold(
       body: Center(
         child: InkWell(
-          onTap: (){
+          onTap: () {
+            GoogleSignIn().signOut();
             fAuth.signOut();
-             Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (c) => MySplashScreen(),
-      ),
-    );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (c) => MySplashScreen(),
+              ),
+            );
           },
-          
-          child: Text('Sign out')),
+          child: const Text('Sign out'),
+        ),
       ),
     );
-    
   }
 }
