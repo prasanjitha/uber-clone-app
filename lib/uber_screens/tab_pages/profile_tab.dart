@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nable/gloable/gloable.dart';
 
 import '../splash_screen.dart';
@@ -17,6 +18,7 @@ class _profileTabState extends State<profileTab> {
       body: Center(
         child: InkWell(
           onTap: () {
+            GoogleSignIn().signOut();
             fAuth.signOut();
             Navigator.push(
               context,

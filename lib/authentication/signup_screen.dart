@@ -3,10 +3,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nable/authentication/car_infore_screen.dart';
 import 'package:nable/authentication/login_screen_implementation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nable/gloable/gloable.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import '../widgets/progress_dialog.dart';
 
@@ -77,7 +79,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Fluttertoast.showToast(
         msg: "Account has been created! ",
       );
-
     } else {
       Fluttertoast.showToast(
         msg: "Account has not been created! ",
@@ -254,9 +255,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextStyle(color: Colors.grey, fontSize: 18),
                   ),
                 ),
+                const SizedBox(height: 20.0),
+                SignInButton(
+                  Buttons.Google,
+                  text: 'continue with google',
+                  onPressed: () async{
+                    await signInWithGoogle();
+
+                  },
+                )
               ],
             ),
           ),
         ));
+  }
+
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleuser = await GoogleSignIn().signIn();
+
+      if (googleuser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleuser.authentication;
+        final credensial = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        UserCredential userCredential =
+            await fAuth.signInWithCredential(credensial);
+        return userCredential.user;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
