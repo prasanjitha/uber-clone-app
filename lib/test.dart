@@ -12,7 +12,7 @@ class TestEidgets extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 20.0,),
-            CupertinoTextField(placeholder: 'enter name',maxLength: 20,
+            CupertinoTextField(placeholder: 'enter new name',maxLength: 20,
             suffix: Icon(Icons.search),)
           ],
         ),
