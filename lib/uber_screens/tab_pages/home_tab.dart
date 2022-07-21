@@ -31,16 +31,29 @@ class _HomeTabState extends State<HomeTab> {
                   //   "name": 'kamal', "address": 'matara'
                   // });
                 },
-                child: Text('Add Data')),
+                child: const Text('Add Data')),
             ElevatedButton(
-                onPressed: () async {
-                  CollectionReference users = firestore.collection('myusers');
-                  QuerySnapshot allresults = await users.get();
-                  allresults.docs.forEach((DocumentSnapshot element) {
+              onPressed: () async {
+                CollectionReference users = firestore.collection('myusers');
+                QuerySnapshot allresults = await users.get();
+                allresults.docs.forEach(
+                  (DocumentSnapshot element) {
                     print(element);
-                  });
-                },
-                child: Text('Read Data firestore'))
+                  },
+                );
+
+                //get user by reference id
+                DocumentSnapshot result = await users.doc('flutter12').get();
+                print(
+                  result.data(),
+                );
+
+                users.doc('flutter12').snapshots().listen((event) {
+                  print(event.data());
+                })
+              },
+              child: const Text('Read Data firestore'),
+            ),
           ],
         ),
       ),
